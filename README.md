@@ -26,9 +26,9 @@ UniLease is a student housing platform designed to simplify the process of findi
 
 ## Team Members
 
-- **Nihar**
-- **Likith**
-- **Kishan**
-- **Jethin**
+- **Nihar Puppala**
+- **Likith Reddy Mallepalli**
+- **Kishan Rao Harale**
+- **Jethin Reddy Gorla**
 
 
