@@ -1,0 +1,22 @@
+<div class="search-bar">
+    <input 
+        type="text" 
+        placeholder="Search by location or title..." 
+        [(ngModel)]="searchTerm" 
+        (input)="filterHouses()"
+        class="search-input"
+    />
+</div>
+
+<div class="house-list">
+    <h2>Available Houses</h2>
+    <div *ngFor="let house of filteredHouses" class="house-card">
+        <img [src]="house.image" alt="{{ house.title }}" class="house-image">
+        <div class="house-details">
+            <h3>{{ house.title }}</h3>
+            <p>{{ house.location }}</p>
+            <p>{{ house.price }}</p>
+            <button (click)="viewHouse(house.id)" class="btn">View Details</button>
+        </div>
+    </div>
+</div>
