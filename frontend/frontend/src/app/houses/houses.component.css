@@ -1,14 +1,17 @@
-.search-bar {
-    margin-bottom: 20px;
+.filter-container {
+    margin: 20px auto;
     text-align: center;
 }
 
-.search-input {
+.price-range {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.range-slider {
     width: 80%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin: 10px auto;
+    display: block;
 }
 
 .house-list {
@@ -16,19 +19,43 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    padding: 20px;
 }
 
 .house-card {
     border: 1px solid #ddd;
-    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
     width: 300px;
     text-align: center;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+    margin: 10px;
 }
 
-.house-image {
-    max-width: 100%;
-    border-radius: 4px;
-    margin-bottom: 10px;
+.house-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.load-more-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.load-more-btn:hover {
+    background-color: #218838;
 }
