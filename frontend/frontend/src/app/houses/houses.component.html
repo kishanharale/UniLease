@@ -1,10 +1,30 @@
-<div class="search-bar">
+<div class="filter-container">
     <input 
         type="text" 
         placeholder="Search by location or title..." 
         [(ngModel)]="searchTerm" 
         (input)="filterHouses()"
         class="search-input"
+    />
+</div>
+
+<div class="price-range">
+    <label for="priceRange">Filter by Rent Price: ${{ selectedMinPrice }} - ${{ selectedMaxPrice }}</label>
+    <input 
+        type="range" 
+        [(ngModel)]="selectedMinPrice" 
+        [min]="minPrice" 
+        [max]="selectedMaxPrice" 
+        (change)="onPriceRangeChange()" 
+        class="range-slider"
+    />
+    <input 
+        type="range" 
+        [(ngModel)]="selectedMaxPrice" 
+        [min]="selectedMinPrice" 
+        [max]="maxPrice" 
+        (change)="onPriceRangeChange()" 
+        class="range-slider"
     />
 </div>
 
@@ -15,7 +35,7 @@
         <div class="house-details">
             <h3>{{ house.title }}</h3>
             <p>{{ house.location }}</p>
-            <p>{{ house.price }}</p>
+            <p>${{ house.price }}/month</p>
             <button (click)="viewHouse(house.id)" class="btn">View Details</button>
         </div>
     </div>
