@@ -23,24 +23,6 @@ export class HouseDetailsComponent implements OnInit {
       'assets/images/photo5.png',
       'assets/images/photo6.png',
     ],
-    units: ['2 Bed, 2 Bath', '3 Bed, 2 Bath'],
-  };
-
-  contactForm = {
-    name: '',
-    email: '',
-    message: '',
-  };
-
-  reviews = [
-    { user: 'John', comment: 'Great place to live!', rating: 5 },
-    { user: 'Jane', comment: 'Lovely amenities.', rating: 4 },
-  ];
-
-  newReview = {
-    user: '',
-    comment: '',
-    rating: 0,
   };
 
   latitude = 38.628989;
@@ -50,7 +32,6 @@ export class HouseDetailsComponent implements OnInit {
   isLightboxOpen = false;
   currentImage = '';
 
- 
   ngOnInit() {
     this.initMap();
   }
@@ -67,14 +48,6 @@ export class HouseDetailsComponent implements OnInit {
       title: this.property.name,
     });
   }
-
-  addReview() {
-    if (this.newReview.user && this.newReview.comment && this.newReview.rating) {
-      this.reviews.push({ ...this.newReview });
-      this.newReview = { user: '', comment: '', rating: 0 }; // Reset form
-    }
-  }
-
 
   // Lightbox methods
   openLightbox(image: string) {
