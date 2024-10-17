@@ -86,7 +86,7 @@ export class HouseDetailsComponent implements OnInit {
 
   // Method for viewing 3D floor plan
   view3D() {
-    window.open('assets/onebed_1bath.html', '_blank');
+    window.open('assets/images/onebed_1bath.html', '_blank');
   }
 
   // Send message method to handle form submission
