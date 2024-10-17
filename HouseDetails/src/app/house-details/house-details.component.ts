@@ -90,8 +90,6 @@ export class HouseDetailsComponent implements OnInit {
     this.isLightboxOpen = false;
   }
 
-
-
   // Method for viewing 3D
   view3D() {
     alert('3D View functionality is not yet implemented!');

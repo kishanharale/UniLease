@@ -20,14 +20,6 @@
   <!-- Google Maps -->
   <div id="map" style="width: 100%; height: 300px;"></div>
 
-  <!-- Send a Message section -->
-  <h2>Send a Message</h2>
-  <form (ngSubmit)="sendMessage()">
-    <input type="text" placeholder="Your Name" [(ngModel)]="contactForm.name" required />
-    <input type="email" placeholder="Your Email" [(ngModel)]="contactForm.email" required />
-    <textarea placeholder="Your Message" [(ngModel)]="contactForm.message" required></textarea>
-    <button type="submit">Send</button>
-  </form>
 
   <!-- Reviews section -->
   <h2>Reviews</h2>
