@@ -50,10 +50,7 @@ export class HouseDetailsComponent implements OnInit {
   isLightboxOpen = false;
   currentImage = '';
 
-  // Chat properties
-  chatMessage = { user: '', content: '' }; // Initialize chatMessage
-  messages: any[] = []; // Initialize messages array
-
+ 
   ngOnInit() {
     this.initMap();
   }
