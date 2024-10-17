@@ -23,6 +23,24 @@ export class HouseDetailsComponent implements OnInit {
       'assets/images/photo5.png',
       'assets/images/photo6.png',
     ],
+    units: ['2 Bed, 2 Bath', '3 Bed, 2 Bath'],
+  };
+
+  contactForm = {
+    name: '',
+    email: '',
+    message: '',
+  };
+
+  reviews = [
+    { user: 'John', comment: 'Great place to live!', rating: 5 },
+    { user: 'Jane', comment: 'Lovely amenities.', rating: 4 },
+  ];
+
+  newReview = {
+    user: '',
+    comment: '',
+    rating: 0,
   };
 
   latitude = 38.628989;
@@ -49,6 +67,13 @@ export class HouseDetailsComponent implements OnInit {
     });
   }
 
+  addReview() {
+    if (this.newReview.user && this.newReview.comment && this.newReview.rating) {
+      this.reviews.push({ ...this.newReview });
+      this.newReview = { user: '', comment: '', rating: 0 }; // Reset form
+    }
+  }
+
   // Lightbox methods
   openLightbox(image: string) {
     this.currentImage = image;
@@ -61,6 +86,6 @@ export class HouseDetailsComponent implements OnInit {
 
   // Method for viewing 3D
   view3D() {
-    alert('3D View functionality is not yet implemented!');
+    window.open('assets/images/onebed_1bath.html', '_blank');
   }
 }
