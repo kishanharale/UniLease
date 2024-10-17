@@ -90,13 +90,7 @@ export class HouseDetailsComponent implements OnInit {
     this.isLightboxOpen = false;
   }
 
-  // Method for sending chat messages
-  sendChatMessage() {
-    if (this.chatMessage.user && this.chatMessage.content) {
-      this.messages.push({ user: this.chatMessage.user, content: this.chatMessage.content });
-      this.chatMessage = { user: '', content: '' }; // Reset chat message
-    }
-  }
+
 
   // Method for viewing 3D
   view3D() {
