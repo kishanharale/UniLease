@@ -75,10 +75,6 @@ export class HouseDetailsComponent implements OnInit {
     }
   }
 
-  sendMessage() {
-    alert('Message sent!');
-    this.contactForm = { name: '', email: '', message: '' }; // Reset form
-  }
 
   // Lightbox methods
   openLightbox(image: string) {
