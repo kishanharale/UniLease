@@ -1,0 +1,55 @@
+<header class="unilease-header">
+  <h1 class="unilease-title">UniLease</h1>
+</header>
+
+<div class="property-details">
+  <h1>{{ property.name }}</h1>
+  <p>{{ property.address }}</p>
+  <p>Price: {{ property.priceRange }}</p>
+  <p>Availability: {{ property.availability }}</p>
+  <p>Phone: {{ property.phone }}</p>
+
+
+  <!-- Photo grid section -->
+  <div class="photo-grid">
+    <img *ngFor="let img of property.images" [src]="img" alt="Property Photo" (click)="openLightbox(img)" />
+  </div>
+  <div class="button-container">
+    <button class="view-3d-button" (click)="view3D()">Click this button to view floor plan in 3D</button>
+  </div>
+  <!-- Google Maps -->
+  <div id="map" style="width: 100%; height: 300px;"></div>
+
+  <!-- Send a Message section -->
+  <h2>Send a Message</h2>
+  <form (ngSubmit)="sendMessage()">
+    <input type="text" placeholder="Your Name" [(ngModel)]="contactForm.name" required />
+    <input type="email" placeholder="Your Email" [(ngModel)]="contactForm.email" required />
+    <textarea placeholder="Your Message" [(ngModel)]="contactForm.message" required></textarea>
+    <button type="submit">Send</button>
+  </form>
+
+  <!-- Reviews section -->
+  <h2>Reviews</h2>
+  <div class="reviews">
+    <div *ngFor="let review of reviews" class="review">
+      <strong>{{ review.user }}</strong> - Rating: {{ review.rating }} / 5
+      <p>{{ review.comment }}</p>
+    </div>
+  </div>
+
+  <!-- Add a Review section -->
+  <h3>Add a Review</h3>
+  <form (ngSubmit)="addReview()">
+    <input type="text" placeholder="Your Name" [(ngModel)]="newReview.user" required />
+    <textarea placeholder="Your Comment" [(ngModel)]="newReview.comment" required></textarea>
+    <input type="number" [(ngModel)]="newReview.rating" min="1" max="5" required />
+    <button type="submit">Submit</button>
+  </form>
+
+  <!-- Lightbox for enlarged image -->
+  <div class="lightbox" *ngIf="isLightboxOpen" (click)="closeLightbox()">
+    <img [src]="currentImage" alt="Large Image" class="lightbox-image" />
+  </div>
+
+
