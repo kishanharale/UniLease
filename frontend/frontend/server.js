@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -7,41 +6,55 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const app = express();
+const port = 3000;
 
-// PostgreSQL connection pool
 const pool = new Pool({
-    user: 'likhith',
-    host: 'localhost',
-    database: 'Unilease',
-    password: '1234',
-    port: 5432
+    user: 'likhith',           
+    host: 'localhost',               
+    database: 'Unilease',  
+    password: '1234',       
+    port: 5432                       
 });
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// JWT secret key
+// Secret key for JWT
 const secretKey = 'your_jwt_secret_key';
 
-// Sign-up API endpoint
+// Middleware to verify the JWT token
+function verifyToken(req, res, next) {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+
+    if (!token) return res.status(401).send({ error: 'Access denied, no token provided' });
+
+    try {
+        const verified = jwt.verify(token, secretKey);
+        req.user = verified;
+        next();
+    } catch (err) {
+        res.status(400).send({ error: 'Invalid token' });
+    }
+}
+
+// Sign-up endpoint
 app.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);  // Hash the password
 
     try {
         const result = await pool.query(
             'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
             [username, email, hashedPassword]
         );
-        res.status(201).json({ user: result.rows[0] });
+        res.status(201).json({ user: result.rows[0] }); 
     } catch (error) {
         console.error('Error during sign-up:', error.message);
         res.status(500).json({ error: 'Error during sign-up' });
     }
 });
 
-// Sign-in API endpoint
+// Sign-in endpoint
 app.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
@@ -52,12 +65,14 @@ app.post('/signin', async (req, res) => {
         }
 
         const user = result.rows[0];
+
+        // Check if the password matches
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid password' });
         }
 
-        // Generate JWT token
+        // Create and sign a JWT token
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
@@ -66,34 +81,18 @@ app.post('/signin', async (req, res) => {
     }
 });
 
-// Middleware to verify JWT token
-function authenticateToken(req, res, next) {
-    const token = req.headers['authorization'];
-    if (!token) return res.status(401).json({ error: 'Access denied, no token provided' });
-
-    jwt.verify(token, secretKey, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Invalid token' });
-        req.user = user;
-        next();
-    });
-}
-
-// API endpoint to fetch apartments (protected route)
-app.get('/apartments', authenticateToken, async (req, res) => {
+// Protected route to fetch apartments
+app.get('/apartments', verifyToken, async (req, res) => {
     try {
         const apartments = await pool.query('SELECT * FROM apartments');
-        res.json(apartments.rows); // Send apartment data as JSON
+        res.json(apartments.rows);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
     }
 });
 
-// Test route to check if backend is working
-app.get('/', (req, res) => {
-    res.send('Backend is working!');
+// Start the server
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
-
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

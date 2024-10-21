@@ -10,7 +10,6 @@ import { catchError } from 'rxjs/operators';
   styleUrls: ['./login.component.css']    // Styles for the component
 })
 export class LoginComponent {
-  // Variables bound to the form fields using [(ngModel)]
   username: string = '';
   email: string = '';
   password: string = '';
@@ -40,7 +39,7 @@ export class LoginComponent {
     }
 
     // Make a POST request for sign-in
-    this.http.post('http://localhost:5000/signin', { username: this.username, password: this.password })  // Changed to port 5000
+    this.http.post('http://localhost:3000/signin', { username: this.username, password: this.password })
       .pipe(
         catchError(error => {
           this.errorMessage = 'Invalid username or password';  // Set error message on failure
@@ -50,8 +49,9 @@ export class LoginComponent {
       .subscribe({
         next: (response: any) => {
           alert('Sign-in successful!');
-          localStorage.setItem('token', response.token);  // Store the JWT token
-          this.router.navigate(['/houses']);  // Navigate to 'houses' page on successful login
+          // Store the token in localStorage if it's returned from the server
+          localStorage.setItem('authToken', response.token);
+          this.router.navigate(['/houses']);  // Navigate to 'houses' page after successful login
         },
         error: (error) => {
           this.errorMessage = 'Login failed. Please check your credentials.';
@@ -70,7 +70,7 @@ export class LoginComponent {
     }
 
     // Make a POST request for sign-up
-    this.http.post('http://localhost:5000/signup', { username: this.username, email: this.email, password: this.password })  // Changed to port 5000
+    this.http.post('http://localhost:3000/signup', { username: this.username, email: this.email, password: this.password })
       .pipe(
         catchError(error => {
           this.errorMessage = 'Error during sign-up. Please try again.';
@@ -79,8 +79,7 @@ export class LoginComponent {
       )
       .subscribe({
         next: (response: any) => {
-          alert('Sign-up successful! Please log in.');
-          // Remove any routing here. We only show a success message after sign-up.
+          alert('Sign-up successful!');
         },
         error: (error) => {
           this.errorMessage = 'Sign-up failed. Please check your input.';
