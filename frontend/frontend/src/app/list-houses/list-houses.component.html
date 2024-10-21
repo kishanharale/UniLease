@@ -1,0 +1,13 @@
+<div *ngIf="apartments.length > 0">
+    <h2>Available Apartments</h2>
+    <ul>
+      <li *ngFor="let apartment of apartments">
+        {{ apartment.address }} - University ID: {{ apartment.university_id }}
+      </li>
+    </ul>
+  </div>
+  
+  <div *ngIf="apartments.length === 0">
+    <p>No apartments available.</p>
+  </div>
+  
