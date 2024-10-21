@@ -1,21 +1,26 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';  // Root component
-import { ListHousesComponent } from './list-houses/list-houses.component';  // List houses component
-import { AppRoutingModule } from './app-routing.module';  // Routing module
-import { provideHttpClient } from '@angular/common/http';  // Provide HttpClient
+import { FormsModule } from '@angular/forms';  // <-- Add this line
+import { provideHttpClient } from '@angular/common/http';
+
+import { AppComponent } from './app.component';
+import { LoginComponent } from './login/login.component';
+import { ListHousesComponent } from './list-houses/list-houses.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListHousesComponent  // Declare ListHousesComponent here
+    LoginComponent,
+    ListHousesComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule  // Import the routing module
+    AppRoutingModule,
+    FormsModule  // <-- Add FormsModule here
   ],
   providers: [
-    provideHttpClient()  // Provide HttpClient for the whole app
+    provideHttpClient()  // Use HttpClient
   ],
   bootstrap: [AppComponent]
 })
