@@ -35,7 +35,7 @@
             <div class="card-body">
               <h5 class="card-title">Address: {{ apartment.address }}</h5>
               <p class="card-text">Price: ${{ apartment.price }}</p>
-              <a href="#" class="btn btn-primary">View Details</a>
+              <a [routerLink]="['/house-details', apartment.id]" class="btn btn-primary">View Details</a>
             </div>
           </div>
         </div>

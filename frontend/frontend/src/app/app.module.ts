@@ -6,6 +6,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';  // Provide
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { ListHousesComponent } from './list-houses/list-houses.component';
+import { DetailsComponent } from './details/details.component'; 
 import { AppRoutingModule } from './app-routing.module';
 import { FilterByAddressPipe } from './filter-by-address.pipe';  // Import the address filter pipe
 import { FilterByPricePipe } from './filter-by-price.pipe';     // Import the price filter pipe
@@ -15,6 +16,7 @@ import { FilterByPricePipe } from './filter-by-price.pipe';     // Import the pr
     AppComponent,
     LoginComponent,
     ListHousesComponent,
+    DetailsComponent,
     FilterByAddressPipe,  // Declare FilterByAddressPipe
     FilterByPricePipe     // Declare FilterByPricePipe
   ],
