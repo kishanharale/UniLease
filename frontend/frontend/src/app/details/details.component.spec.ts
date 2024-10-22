@@ -1,21 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HouseDetailsComponent } from './house-details.component';
+
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { from } from 'rxjs';
+import { DetailsComponent } from './details.component';
 
 describe('HouseDetailsComponent', () => {
-  let component: HouseDetailsComponent;
-  let fixture: ComponentFixture<HouseDetailsComponent>;
+  let component: DetailsComponent;
+  let fixture: ComponentFixture<DetailsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule], // Import FormsModule to handle ngModel
-      declarations: [HouseDetailsComponent],
+      declarations: [DetailsComponent],
     }).compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HouseDetailsComponent);
+    fixture = TestBed.createComponent(DetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
