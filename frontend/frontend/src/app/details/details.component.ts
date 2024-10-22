@@ -16,11 +16,11 @@ export class DetailsComponent implements OnInit {
     availability: 'Now',
     phone: '(314) 582-4621',
     images: [ 
-      'assets/images/photo2.png',
-      'assets/images/photo3.png',
-      'assets/images/photo4.png',
-      'assets/images/photo5.png',
-      'assets/images/photo6.png',
+      'photo2.png',
+      'photo3.png',
+      'photo4.png',
+      'photo5.png',
+      'photo6.png',
     ],
     units: ['2 Bed, 2 Bath', '3 Bed, 2 Bath'],
   };
@@ -59,7 +59,7 @@ export class DetailsComponent implements OnInit {
   loadGoogleMapsScript(): Promise<void> {
     return new Promise((resolve) => {
       const script = document.createElement('script');
-      script.src = 'https://maps.googleapis.com/maps/api/js?key=https://maps.googleapis.com/maps/api/js?key=AIzaSyDslNs3YxM06JgJbpx0r0FH0p8kwxAHSmM';
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDslNs3YxM06JgJbpx0r0FH0p8kwxAHSmM';
       script.defer = true;
       script.async = true;
       script.onload = () => resolve();
@@ -100,7 +100,7 @@ export class DetailsComponent implements OnInit {
 
   // Method for viewing 3D floor plan
   view3D() {
-    window.open('assets/images/onebed_1bath.html', '_blank');
+    window.open('/assets/images/onebed_1bath.html', '_blank');
   }
 
   // Send message method to handle form submission

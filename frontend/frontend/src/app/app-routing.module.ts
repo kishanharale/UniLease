@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'houses', component: ListHousesComponent },  // Route for list houses
   { path: 'house-details/:id', component: DetailsComponent }, //route to house details
   { path: '', redirectTo: '/login', pathMatch: 'full' },  // Default route to login
-  { path: '**', redirectTo: '/login' }  // Wildcard route for invalid URLs
+  //{ path: '**', redirectTo: '/login' }  // Wildcard route for invalid URLs
 ];
 
 @NgModule({
