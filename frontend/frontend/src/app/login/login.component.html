@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="login.component.css">
+    <title>signin-signup</title>
+</head>
+<body>
 <div class="container">
   <div class="signin-signup">
     <!-- Sign-in Form -->
@@ -20,7 +31,7 @@
         <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
         <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
       </div>
-      <p class="account-text">Don't have an account? <a href="#" (click)="switchToSignUp()">Sign up</a></p>
+      <p class="account-text">Don't have an account? <a href="#" id="sign-up-btn2" (click)="switchToSignUp()">Sign up</a></p>
     </form>
 
     <!-- Sign-up Form -->
@@ -46,8 +57,10 @@
         <a href="#" class="social-icon"><i class="fab fa-google"></i></a>
         <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
       </div>
-      <p class="account-text">Already have an account? <a href="#" (click)="switchToSignIn()">Sign in</a></p>
+  
+      <p class="account-text">Already have an account? <a href="#" id="sign-in-btn2" (click)="switchToSignIn()">Sign in</a></p>
     </form>
+    
   </div>
 
   <!-- Panel for toggling between sign-in and sign-up -->
@@ -56,17 +69,17 @@
       <div class="content">
         <h3>Enrolled Student?</h3>
         <p>Welcome back! We're glad to see you at Unilease!</p>
-        <button class="btn" (click)="switchToSignIn()">Sign in</button>
+        <button class="btn" id="sign-in-btn" (click)="switchToSignIn()">Sign in</button>
       </div>
-      <img src="./unilease.svg" alt="Unilease Logo" class="image">
+      <img src="unilease.svg" alt="Unilease Logo" class="image">
     </div>
     <div class="panel right-panel">
       <div class="content">
         <h3>New to Unilease?</h3>
         <p>Welcome to Unilease! We're excited to help you find your new home!</p>
-        <button class="btn" (click)="switchToSignUp()">Sign up</button>
+        <button class="btn" id="sign-up-btn" (click)="switchToSignUp()">Sign up</button>
       </div>
-      <img src="./unilease.svg" alt="Unilease Logo" class="image">
+      <img src="unilease.svg" alt="Unilease Logo" class="image">
     </div>
   </div>
 </div>

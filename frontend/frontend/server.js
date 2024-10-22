@@ -10,7 +10,7 @@ const port = 3000;
 
 // PostgreSQL connection pool
 const pool = new Pool({
-    user: 'Jethin',           
+    user: 'postgres',           
     host: 'localhost',               
     database: 'Unilease',  
     password: '1234',       
