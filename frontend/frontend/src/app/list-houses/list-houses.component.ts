@@ -10,11 +10,12 @@ import { Observable } from 'rxjs';
 export class ListHousesComponent implements OnInit {
   apartments: any[] = [];  // Array to hold the fetched apartments data
   errorMessage: string = '';  // Variable to hold error messages
+  maxPrice: number = 5000;  // Default max price
+  searchQuery: string = '';  // Search query for filtering
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    // Fetch apartments when the component is initialized
     this.getApartments().subscribe(
       (data) => {
         console.log('Fetched apartments:', data);  // Log the data to check if it's correctly fetched
@@ -27,17 +28,21 @@ export class ListHousesComponent implements OnInit {
     );
   }
 
-  // Function to fetch apartments from the backend
+  // Function to fetch apartments with proper Authorization headers
   getApartments(): Observable<any[]> {
-    // Get the JWT token from localStorage (or wherever you're storing it after login)
-    const token = localStorage.getItem('authToken');
+    let token: string = '';
 
-    // Set the Authorization header with the JWT token
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`  // Ensure the token is passed in the request headers
-    });
+    // Check if window and localStorage exist (to ensure it's running in the browser)
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      token = localStorage.getItem('authToken') || '';  // Default to an empty string if the token is null
+    }
 
-    // Make the HTTP GET request with the Authorization header
+    // Create Authorization headers only if the token is available
+    const headers = token
+      ? new HttpHeaders({ 'Authorization': `Bearer ${token}` })
+      : new HttpHeaders();
+
+    // Make the GET request to fetch apartments with Authorization headers if applicable
     return this.http.get<any[]>('http://localhost:3000/apartments', { headers });
   }
 }

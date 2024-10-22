@@ -1,13 +1,45 @@
-<div *ngIf="apartments.length > 0">
-    <h2>Available Apartments</h2>
-    <ul>
-      <li *ngFor="let apartment of apartments">
-        {{ apartment.address }} - University ID: {{ apartment.university_id }}
-      </li>
-    </ul>
-  </div>
+<div class="container">
+  <h2 class="text-center my-4">Available Apartments</h2>
   
-  <div *ngIf="apartments.length === 0">
-    <p>No apartments available.</p>
+  <div class="row">
+    <!-- Left section: Price filter in a vertical navbar -->
+    <nav class="col-md-3">
+      <div class="navbar bg-light flex-column">
+        <div class="navbar-item mb-4">
+          <label for="price-slider" class="form-label">Max Price: ${{ maxPrice }}</label>
+          <input id="price-slider" type="range" class="form-range" [(ngModel)]="maxPrice" min="0" max="5000">
+        </div>
+      </div>
+    </nav>
+
+    <!-- Right section: Search and Apartments list -->
+    <div class="col-md-9">
+      <div class="input-group mb-3">
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="searchQuery" 
+          placeholder="Search by address" 
+          aria-label="Search by address"
+        />
+      </div>
+
+      <!-- Apartments list -->
+      <div *ngFor="let apartment of apartments | filterByPrice: maxPrice | filterByAddress: searchQuery" class="card mb-4">
+        <div class="row g-0">
+          <div class="col-md-3">
+            <!-- Display image from the database -->
+            <img [src]="apartment.image_url" alt="Apartment image" class="img-fluid rounded-start">
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              <h5 class="card-title">Address: {{ apartment.address }}</h5>
+              <p class="card-text">Price: ${{ apartment.price }}</p>
+              <a href="#" class="btn btn-primary">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  
+</div>

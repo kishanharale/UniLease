@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const port = 3000;
 
+// PostgreSQL connection pool
 const pool = new Pool({
     user: 'likhith',           
     host: 'localhost',               
@@ -16,8 +17,8 @@ const pool = new Pool({
     port: 5432                       
 });
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(bodyParser.json()); // Enable parsing JSON data
 
 // Secret key for JWT
 const secretKey = 'your_jwt_secret_key';
@@ -40,14 +41,16 @@ function verifyToken(req, res, next) {
 // Sign-up endpoint
 app.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);  // Hash the password
+
+    // Hash the password before saving to the database
+    const hashedPassword = await bcrypt.hash(password, 10);  
 
     try {
         const result = await pool.query(
             'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *',
             [username, email, hashedPassword]
         );
-        res.status(201).json({ user: result.rows[0] }); 
+        res.status(201).json({ user: result.rows[0] });
     } catch (error) {
         console.error('Error during sign-up:', error.message);
         res.status(500).json({ error: 'Error during sign-up' });
@@ -66,13 +69,13 @@ app.post('/signin', async (req, res) => {
 
         const user = result.rows[0];
 
-        // Check if the password matches
+        // Compare the provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid password' });
         }
 
-        // Create and sign a JWT token
+        // Create and sign a JWT token, valid for 1 hour
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
@@ -81,13 +84,14 @@ app.post('/signin', async (req, res) => {
     }
 });
 
-// Protected route to fetch apartments
+// Protected route to fetch apartments (including image_url)
 app.get('/apartments', verifyToken, async (req, res) => {
     try {
-        const apartments = await pool.query('SELECT * FROM apartments');
+        // Fetch all apartment data, including image_url
+        const apartments = await pool.query('SELECT id, address, price, image_url FROM apartments');
         res.json(apartments.rows);
     } catch (err) {
-        console.error(err.message);
+        console.error('Error fetching apartments:', err.message);
         res.status(500).send('Server error');
     }
 });
