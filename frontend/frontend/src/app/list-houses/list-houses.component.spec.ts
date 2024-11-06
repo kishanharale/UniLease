@@ -1,23 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ListHousesComponent } from './list-houses.component';
+import { FormsModule } from '@angular/forms';  // For two-way data binding support
 import { HttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+import { FilterByAddressPipe } from '../filter-by-address.pipe';
+import { FilterByPricePipe } from '../filter-by-price.pipe';
 
 describe('ListHousesComponent', () => {
   let component: ListHousesComponent;
   let fixture: ComponentFixture<ListHousesComponent>;
   let httpClient: HttpClient;
   let httpTestingController: HttpTestingController;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [ListHousesComponent],
+      imports: [HttpClientTestingModule, FormsModule],
+      declarations: [
+        ListHousesComponent,
+        FilterByAddressPipe,   // Declare FilterByAddressPipe
+        FilterByPricePipe      // Declare FilterByPricePipe
+      ],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
+ 
     fixture = TestBed.createComponent(ListHousesComponent);
     component = fixture.componentInstance;
     httpClient = TestBed.inject(HttpClient);
