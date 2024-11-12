@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';  // <-- Add this line for template-driven forms
-import { provideHttpClient, withFetch } from '@angular/common/http';  // Provide HttpClient with fetch API
+import { FormsModule } from '@angular/forms';
+import { provideHttpClient, withFetch } from '@angular/common/http'; // Import provideHttpClient and withFetch
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { ListHousesComponent } from './list-houses/list-houses.component';
 import { DetailsComponent } from './details/details.component'; 
 import { AppRoutingModule } from './app-routing.module';
-import { FilterByAddressPipe } from './filter-by-address.pipe';  // Import the address filter pipe
+import { FilterByAddressPipe } from './filter-by-address.pipe';
 import { FilterByPricePipe } from './filter-by-price.pipe';
-import { AdminPanelComponent } from './admin-panel/admin-panel.component';     // Import the price filter pipe
+import { FilterFavoritesPipe } from './pipes/filter-favorites.pipe';
 
 @NgModule({
   declarations: [
@@ -18,16 +18,17 @@ import { AdminPanelComponent } from './admin-panel/admin-panel.component';     /
     LoginComponent,
     ListHousesComponent,
     DetailsComponent,
-    FilterByAddressPipe,  // Declare FilterByAddressPipe
-    FilterByPricePipe, AdminPanelComponent     // Declare FilterByPricePipe
+    FilterByAddressPipe,
+    FilterByPricePipe,
+    FilterFavoritesPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule  // <-- Add FormsModule to handle [(ngModel)] for form controls
+    FormsModule
   ],
   providers: [
-    provideHttpClient(withFetch())  // Provide HttpClient with fetch API for SSR
+    provideHttpClient(withFetch())  // Configure HttpClient to use fetch
   ],
   bootstrap: [AppComponent]
 })

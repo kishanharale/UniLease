@@ -10,15 +10,15 @@ const port = 3000;
 
 // PostgreSQL connection pool
 const pool = new Pool({
-    user: 'postgres',           
-    host: 'localhost',               
-    database: 'Unilease',  
-    password: '1234',       
-    port: 5432                       
+    user: 'likhith',
+    host: 'localhost',
+    database: 'Unilease',
+    password: '1234',
+    port: 5432
 });
 
-app.use(cors()); // Enable Cross-Origin Resource Sharing
-app.use(bodyParser.json()); // Enable parsing JSON data
+app.use(cors());
+app.use(bodyParser.json());
 
 // Secret key for JWT
 const secretKey = 'your_jwt_secret_key';
@@ -42,8 +42,7 @@ function verifyToken(req, res, next) {
 app.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
 
-    // Hash the password before saving to the database
-    const hashedPassword = await bcrypt.hash(password, 10);  
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
         const result = await pool.query(
@@ -68,14 +67,11 @@ app.post('/signin', async (req, res) => {
         }
 
         const user = result.rows[0];
-
-        // Compare the provided password with the stored hashed password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: 'Invalid password' });
         }
 
-        // Create and sign a JWT token, valid for 1 hour
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
@@ -84,15 +80,55 @@ app.post('/signin', async (req, res) => {
     }
 });
 
-// Protected route to fetch apartments (including image_url)
+// Protected route to fetch apartments with favorite status
 app.get('/apartments', verifyToken, async (req, res) => {
     try {
-        // Fetch all apartment data, including image_url
-        const apartments = await pool.query('SELECT id, address, price, image_url FROM apartments');
+        // Check if user ID exists in the request object (added by verifyToken middleware)
+        if (!req.user || !req.user.userId) {
+            console.error('Error: User ID is missing in the request.');
+            return res.status(400).json({ error: 'User ID is missing' });
+        }
+
+        // Fetch apartments and favorite status for the logged-in user
+        const apartments = await pool.query(`
+            SELECT a.id, a.address, a.price, a.image_url, 
+                   CASE WHEN f.user_id IS NOT NULL THEN true ELSE false END AS is_favorite
+            FROM apartments a
+            LEFT JOIN favorites f ON a.id = f.apartment_id AND f.user_id = $1
+        `, [req.user.userId]);
+
+        console.log('Apartments fetched successfully:', apartments.rows);
         res.json(apartments.rows);
     } catch (err) {
-        console.error('Error fetching apartments:', err.message);
-        res.status(500).send('Server error');
+        console.error('Error fetching apartments:', err); // Log full error object
+        res.status(500).json({ error: 'Server error', details: err.message });
+    }
+});
+
+
+// Endpoint to toggle favorite status
+app.post('/favorites', verifyToken, async (req, res) => {
+    const { houseId, isFavorite } = req.body;
+    const userId = req.user.userId;
+
+    try {
+        if (isFavorite) {
+            // Add to favorites if marked as favorite
+            await pool.query(
+                'INSERT INTO favorites (user_id, apartment_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+                [userId, houseId]
+            );
+        } else {
+            // Remove from favorites if unmarked
+            await pool.query(
+                'DELETE FROM favorites WHERE user_id = $1 AND apartment_id = $2',
+                [userId, houseId]
+            );
+        }
+        res.status(200).json({ message: 'Favorite status updated successfully' });
+    } catch (error) {
+        console.error('Error updating favorite status:', error.message);
+        res.status(500).json({ error: 'Error updating favorite status' });
     }
 });
 
