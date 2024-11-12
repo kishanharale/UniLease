@@ -4,13 +4,14 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer'); // Import nodemailer
 
 const app = express();
 const port = 3000;
 
 // PostgreSQL connection pool
 const pool = new Pool({
-    user: 'likhith',
+    user: 'Jethin',
     host: 'localhost',
     database: 'Unilease',
     password: '1234',
@@ -38,6 +39,15 @@ function verifyToken(req, res, next) {
     }
 }
 
+// Nodemailer transporter configuration
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'jethinreddy17@gmail.com', // Replace with your email
+        pass: 'redk fmkb oolb rbhx' // Replace with your app-specific password
+    }
+});
+
 // Sign-up endpoint
 app.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
@@ -56,7 +66,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// Sign-in endpoint
+// Sign-in endpoint with email notification
 app.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
@@ -73,6 +83,28 @@ app.post('/signin', async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
+        
+        // Send an email notification on successful sign-in
+        const recipientEmail = user.email;
+        const subject = 'Sign-In Notification';
+        const message = `Hello ${user.username},\n\nYou have successfully signed in to UniLease. If this wasn't you, please contact support immediately.`;
+
+        const mailOptions = {
+            from: 'your-email@gmail.com', // Replace with your email
+            to: recipientEmail,
+            subject: subject,
+            text: message
+        };
+
+        // Attempt to send the email
+        try {
+            await transporter.sendMail(mailOptions);
+            console.log('Sign-in notification email sent successfully');
+        } catch (error) {
+            console.error('Error sending sign-in notification email:', error.message);
+        }
+
+        // Respond with the token
         res.json({ token });
     } catch (error) {
         console.error('Error during sign-in:', error.message);
@@ -104,7 +136,6 @@ app.get('/apartments', verifyToken, async (req, res) => {
         res.status(500).json({ error: 'Server error', details: err.message });
     }
 });
-
 
 // Endpoint to toggle favorite status
 app.post('/favorites', verifyToken, async (req, res) => {
