@@ -26,9 +26,9 @@
     <h2>Contact Property</h2>
     <div class="contact-property-box">
       <form (ngSubmit)="sendMessage()">
-        <input type="text" placeholder="Your Name" [(ngModel)]="contactForm.name" name="name" required />
-        <input type="email" placeholder="Your Email" [(ngModel)]="contactForm.email" name="email" required />
-        <textarea placeholder="Your Message" [(ngModel)]="contactForm.message" name="message" required></textarea>
+        <input type="text" placeholder="Your Name" [(ngModel)]="contactForm.name" name="name" [ngModelOptions]="{standalone: true}" required />
+        <input type="email" placeholder="Your Email" [(ngModel)]="contactForm.email" name="email" [ngModelOptions]="{standalone: true}" required />
+        <textarea placeholder="Your Message" [(ngModel)]="contactForm.message" name="message"  [ngModelOptions]="{standalone: true}" required></textarea>
         <button type="submit">Send</button>
       </form>      
     </div>
@@ -45,9 +45,9 @@
     <!-- Add a Review section -->
     <h3>Add a Review</h3>
     <form (ngSubmit)="addReview()">
-      <input type="text" placeholder="Your Name" [(ngModel)]="newReview.user" required />
-      <textarea placeholder="Your Comment" [(ngModel)]="newReview.comment" required></textarea>
-      <input type="number" [(ngModel)]="newReview.rating" min="1" max="5" required />
+      <input type="text" placeholder="Your Name" [(ngModel)]="newReview.user"  name="user" [ngModelOptions]="{standalone: true}" required />
+      <textarea placeholder="Your Comment" [(ngModel)]="newReview.comment"  name="comment"  [ngModelOptions]="{standalone: true}" required></textarea>
+      <input type="number" [(ngModel)]="newReview.rating" min="1" max="5"  name="rating" [ngModelOptions]="{standalone: true}" required />
       <button type="submit">Submit</button>
     </form>
   

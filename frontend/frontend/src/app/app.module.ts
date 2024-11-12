@@ -9,7 +9,8 @@ import { ListHousesComponent } from './list-houses/list-houses.component';
 import { DetailsComponent } from './details/details.component'; 
 import { AppRoutingModule } from './app-routing.module';
 import { FilterByAddressPipe } from './filter-by-address.pipe';  // Import the address filter pipe
-import { FilterByPricePipe } from './filter-by-price.pipe';     // Import the price filter pipe
+import { FilterByPricePipe } from './filter-by-price.pipe';
+import { AdminPanelComponent } from './admin-panel/admin-panel.component';     // Import the price filter pipe
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { FilterByPricePipe } from './filter-by-price.pipe';     // Import the pr
     ListHousesComponent,
     DetailsComponent,
     FilterByAddressPipe,  // Declare FilterByAddressPipe
-    FilterByPricePipe     // Declare FilterByPricePipe
+    FilterByPricePipe, AdminPanelComponent     // Declare FilterByPricePipe
   ],
   imports: [
     BrowserModule,

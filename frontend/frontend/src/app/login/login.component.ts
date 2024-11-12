@@ -38,6 +38,12 @@ export class LoginComponent {
       return;
     }
 
+    if (this.username === 'kishan' && this.password === '1234') {
+      // Navigate to admin page if credentials match
+      this.router.navigate(['/app-admin-panel']);
+      return;
+    }
+
     // Make a POST request for sign-in
     this.http.post('http://localhost:3000/signin', { username: this.username, password: this.password })
       .pipe(

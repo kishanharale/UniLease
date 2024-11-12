@@ -1,5 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, tick,fakeAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { from } from 'rxjs';
@@ -9,18 +8,18 @@ describe('HouseDetailsComponent', () => {
   let component: DetailsComponent;
   let fixture: ComponentFixture<DetailsComponent>;
 
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [FormsModule], // Import FormsModule to handle ngModel
       declarations: [DetailsComponent],
     }).compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(DetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
+
+
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
@@ -93,14 +92,17 @@ describe('HouseDetailsComponent', () => {
     expect(component.contactForm.message).toBe('');
   });
 
-  it('should display a map with correct property coordinates', () => {
-    spyOn(component, 'initMap').and.callThrough();
-    component.ngOnInit();
-    expect(component.initMap).toHaveBeenCalled();
-
+  it('should display a map with correct property coordinates', fakeAsync(() => {
+    spyOn(component, 'initMap').and.callThrough(); // Spy on the initMap method
+  
+    component.ngOnInit();  // Trigger ngOnInit
+    tick(); // Simulate async completion
+  
+    expect(component.initMap).toHaveBeenCalled(); // Verify initMap was called
+  
     const mapElement = fixture.nativeElement.querySelector('#map');
-    expect(mapElement).toBeTruthy();
-  });
+    expect(mapElement).toBeTruthy(); // Check that map element is present in the DOM
+  }));
 
   it('should open a new window to view the 3D floor plan', () => {
     spyOn(window, 'open');
