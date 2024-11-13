@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer'); // Import nodemailer
 
 const app = express();
 const port = 3000;
 
 // PostgreSQL connection pool
 const pool = new Pool({
-    user: 'Jethin',
+    user: 'likhith',
     host: 'localhost',
     database: 'Unilease',
     password: '1234',
@@ -27,7 +26,6 @@ const secretKey = 'your_jwt_secret_key';
 // Middleware to verify the JWT token
 function verifyToken(req, res, next) {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-
     if (!token) return res.status(401).send({ error: 'Access denied, no token provided' });
 
     try {
@@ -39,19 +37,9 @@ function verifyToken(req, res, next) {
     }
 }
 
-// Nodemailer transporter configuration
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'jethinreddy17@gmail.com', // Replace with your email
-        pass: 'redk fmkb oolb rbhx' // Replace with your app-specific password
-    }
-});
-
 // Sign-up endpoint
 app.post('/signup', async (req, res) => {
     const { username, email, password } = req.body;
-
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
@@ -66,7 +54,7 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// Sign-in endpoint with email notification
+// Sign-in endpoint
 app.post('/signin', async (req, res) => {
     const { username, password } = req.body;
 
@@ -83,28 +71,6 @@ app.post('/signin', async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
-        
-        // Send an email notification on successful sign-in
-        const recipientEmail = user.email;
-        const subject = 'Sign-In Notification';
-        const message = `Hello ${user.username},\n\nYou have successfully signed in to UniLease. If this wasn't you, please contact support immediately.`;
-
-        const mailOptions = {
-            from: 'your-email@gmail.com', // Replace with your email
-            to: recipientEmail,
-            subject: subject,
-            text: message
-        };
-
-        // Attempt to send the email
-        try {
-            await transporter.sendMail(mailOptions);
-            console.log('Sign-in notification email sent successfully');
-        } catch (error) {
-            console.error('Error sending sign-in notification email:', error.message);
-        }
-
-        // Respond with the token
         res.json({ token });
     } catch (error) {
         console.error('Error during sign-in:', error.message);
@@ -112,32 +78,44 @@ app.post('/signin', async (req, res) => {
     }
 });
 
+// Profile Details Endpoint
+app.get('/user/profile', verifyToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const result = await pool.query(
+            'SELECT id, username, email, created_at FROM users WHERE id = $1',
+            [userId]
+        );
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching profile:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Protected route to fetch apartments with favorite status
 app.get('/apartments', verifyToken, async (req, res) => {
     try {
-        // Check if user ID exists in the request object (added by verifyToken middleware)
-        if (!req.user || !req.user.userId) {
-            console.error('Error: User ID is missing in the request.');
-            return res.status(400).json({ error: 'User ID is missing' });
-        }
-
-        // Fetch apartments and favorite status for the logged-in user
+        const userId = req.user.userId;
         const apartments = await pool.query(`
             SELECT a.id, a.address, a.price, a.image_url, 
                    CASE WHEN f.user_id IS NOT NULL THEN true ELSE false END AS is_favorite
             FROM apartments a
             LEFT JOIN favorites f ON a.id = f.apartment_id AND f.user_id = $1
-        `, [req.user.userId]);
+        `, [userId]);
 
-        console.log('Apartments fetched successfully:', apartments.rows);
         res.json(apartments.rows);
     } catch (err) {
-        console.error('Error fetching apartments:', err); // Log full error object
+        console.error('Error fetching apartments:', err);
         res.status(500).json({ error: 'Server error', details: err.message });
     }
 });
 
-// Endpoint to toggle favorite status
+// Favorites Endpoint to toggle favorite status
 app.post('/favorites', verifyToken, async (req, res) => {
     const { houseId, isFavorite } = req.body;
     const userId = req.user.userId;
@@ -146,7 +124,7 @@ app.post('/favorites', verifyToken, async (req, res) => {
         if (isFavorite) {
             // Add to favorites if marked as favorite
             await pool.query(
-                'INSERT INTO favorites (user_id, apartment_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+                'INSERT INTO favorites (user_id, apartment_id, created_at) VALUES ($1, $2, NOW()) ON CONFLICT DO NOTHING',
                 [userId, houseId]
             );
         } else {
@@ -162,6 +140,46 @@ app.post('/favorites', verifyToken, async (req, res) => {
         res.status(500).json({ error: 'Error updating favorite status' });
     }
 });
+
+// Recent Activity Endpoint
+app.get('/user/activity', verifyToken, async (req, res) => {
+    try {
+        const userId = req.user.userId;
+        const result = await pool.query(
+            `SELECT a.id, a.address, a.price, f.created_at AS favorited_at
+             FROM apartments a
+             INNER JOIN favorites f ON a.id = f.apartment_id
+             WHERE f.user_id = $1
+             ORDER BY f.created_at DESC
+             LIMIT 10`,
+            [userId]
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching recent activity:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Favorites Endpoint to get the list of favorites for the authenticated user
+app.get('/favorites', verifyToken, async (req, res) => {
+    const userId = req.user.userId;
+
+    try {
+        const result = await pool.query(
+            `SELECT a.id, a.address, a.price, a.image_url
+             FROM apartments a
+             INNER JOIN favorites f ON a.id = f.apartment_id
+             WHERE f.user_id = $1`,
+            [userId]
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching favorites:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 
 // Start the server
 app.listen(port, () => {
