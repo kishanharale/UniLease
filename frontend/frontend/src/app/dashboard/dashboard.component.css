@@ -1,0 +1,29 @@
+.container {
+    position: relative;
+  }
+  
+  .profile-card {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 250px; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .card-header {
+    font-weight: bold;
+    background-color: #f8f9fa;
+  }
+  .profile-card {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 250px;
+    margin-bottom: 1rem; /* Adds spacing below the profile section */
+  }
+    
