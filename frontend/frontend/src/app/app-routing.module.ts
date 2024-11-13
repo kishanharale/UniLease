@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';  // Import the login component
-import { ListHousesComponent } from './list-houses/list-houses.component';  // Import the list houses component
+import { LoginComponent } from './login/login.component';
+import { ListHousesComponent } from './list-houses/list-houses.component';
 import { DetailsComponent } from './details/details.component';
-import { FormsModule } from '@angular/forms';
-import { AdminPanelComponent } from './admin-panel/admin-panel.component';
+import { DashboardComponent } from './dashboard/dashboard.component';  // Import the dashboard component
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },  // Route for login
-  { path: 'houses', component: ListHousesComponent },  // Route for list houses
-  { path: 'house-details/:id', component: DetailsComponent }, //route to house details
-  { path: '', redirectTo: '/login', pathMatch: 'full' },  // Default route to login
-  { path: 'app-admin-panel' , component: AdminPanelComponent}
-  //{ path: '**', redirectTo: '/login' }  // Wildcard route for invalid URLs
+  { path: 'login', component: LoginComponent },              // Route for login
+  { path: 'houses', component: ListHousesComponent },        // Route for list houses
+  { path: 'dashboard', component: DashboardComponent }, // Route for dashboard
+  { path: 'house-details/:id', component: DetailsComponent }, // Route for house details
+       
+  { path: '', redirectTo: '/login', pathMatch: 'full' },     // Default route to login
+  { path: '**', redirectTo: '/login' }                       // Wildcard route for invalid URLs
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes),FormsModule],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

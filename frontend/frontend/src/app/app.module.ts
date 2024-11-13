@@ -6,7 +6,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http'; // Import p
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { ListHousesComponent } from './list-houses/list-houses.component';
-import { DetailsComponent } from './details/details.component'; 
+import { DetailsComponent } from './details/details.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { AppRoutingModule } from './app-routing.module';
 import { FilterByAddressPipe } from './filter-by-address.pipe';
 import { FilterByPricePipe } from './filter-by-price.pipe';
@@ -18,6 +19,7 @@ import { FilterFavoritesPipe } from './pipes/filter-favorites.pipe';
     LoginComponent,
     ListHousesComponent,
     DetailsComponent,
+    DashboardComponent,
     FilterByAddressPipe,
     FilterByPricePipe,
     FilterFavoritesPipe
@@ -28,7 +30,7 @@ import { FilterFavoritesPipe } from './pipes/filter-favorites.pipe';
     FormsModule
   ],
   providers: [
-    provideHttpClient(withFetch())  // Configure HttpClient to use fetch
+    provideHttpClient(withFetch())  // Enable fetch for HttpClient
   ],
   bootstrap: [AppComponent]
 })

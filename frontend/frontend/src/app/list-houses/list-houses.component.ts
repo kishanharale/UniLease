@@ -13,16 +13,21 @@ export class ListHousesComponent implements OnInit {
   maxPrice: number = 5000;           // Default max price
   searchQuery: string = '';          // Search query for filtering
   showFavoritesOnly: boolean = false; // Toggle to show only favorites
+  
+  // Profile and dashboard properties
+  profile: any;
+  favorites: any[] = [];
+  recentActivity: any[] = [];
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.getApartments().subscribe(
       (data) => {
-        console.log('Fetched apartments:', data); // Log the data to check if it's correctly fetched
+        console.log('Fetched apartments:', data);
         this.apartments = data.map(apartment => ({
           ...apartment,
-          isFavorite: apartment.isFavorite || false // Initialize isFavorite based on fetched data
+          isFavorite: apartment.isFavorite || false
         }));
       },
       (error) => {
@@ -30,11 +35,17 @@ export class ListHousesComponent implements OnInit {
         this.errorMessage = 'Error fetching apartments. Please try again later.';
       }
     );
+
+    // Fetch profile, favorites, and recent activity
+    this.getProfile();
+    this.getFavorites();
+    this.getRecentActivity();
   }
 
   // Function to fetch apartments with proper Authorization headers
   getApartments(): Observable<any[]> {
     const token = this.getToken();
+    console.log(token);
     const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : new HttpHeaders();
 
     return this.http.get<any[]>('http://localhost:3000/apartments', { headers });
@@ -45,6 +56,66 @@ export class ListHousesComponent implements OnInit {
     return (typeof window !== 'undefined' && typeof localStorage !== 'undefined') 
       ? localStorage.getItem('authToken') || ''
       : '';
+  }
+
+  // Fetch profile details
+  getProfile() {
+    const token = this.getToken();
+    if (token) {
+      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+      this.http.get<any>('http://localhost:3000/user/profile', { headers })
+        .subscribe(
+          data => {
+            console.log('Fetched profile:', data);
+            this.profile = data;
+          },
+          error => {
+            console.error('Error fetching profile:', error);
+          }
+        );
+    } else {
+      console.error('Authorization token is missing. Unable to fetch profile.');
+    }
+  }
+
+  // Fetch favorites
+  getFavorites() {
+    const token = this.getToken();
+    if (token) {
+      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+      this.http.get<any[]>('http://localhost:3000/favorites', { headers })
+        .subscribe(
+          data => {
+            console.log('Fetched favorites:', data);
+            this.favorites = data;
+          },
+          error => {
+            console.error('Error fetching favorites:', error);
+          }
+        );
+    } else {
+      console.error('Authorization token is missing. Unable to fetch favorites.');
+    }
+  }
+
+  // Fetch recent activity
+  getRecentActivity() {
+    const token = this.getToken();
+    if (token) {
+      const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+      this.http.get<any[]>('http://localhost:3000/user/activity', { headers })
+        .subscribe(
+          data => {
+            console.log('Fetched recent activity:', data);
+            this.recentActivity = data;
+          },
+          error => {
+            console.error('Error fetching recent activity:', error);
+          }
+        );
+    } else {
+      console.error('Authorization token is missing. Unable to fetch recent activity.');
+    }
   }
 
   // Toggle favorite status of an apartment
