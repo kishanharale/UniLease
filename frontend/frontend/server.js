@@ -81,21 +81,27 @@ app.post('/signin', async (req, res) => {
 // Profile Details Endpoint
 app.get('/user/profile', verifyToken, async (req, res) => {
     try {
-        const userId = req.user.userId;
-        const result = await pool.query(
-            'SELECT id, username, email, created_at FROM users WHERE id = $1',
-            [userId]
-        );
-        if (result.rows.length > 0) {
-            res.json(result.rows[0]);
-        } else {
-            res.status(404).json({ error: 'User not found' });
-        }
+      const userId = req.user.userId;
+      const result = await pool.query(
+        'SELECT id, username, email, created_at FROM users WHERE id = $1',
+        [userId]
+      );
+      if (result.rows.length > 0) {
+        res.json({ 
+          id: result.rows[0].id, 
+          name: result.rows[0].username, // Ensure name is correctly assigned
+          email: result.rows[0].email, 
+          created_at: result.rows[0].created_at 
+        });
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
     } catch (error) {
-        console.error('Error fetching profile:', error.message);
-        res.status(500).json({ error: 'Server error' });
+      console.error('Error fetching profile:', error.message);
+      res.status(500).json({ error: 'Server error' });
     }
-});
+  });
+  
 
 // Protected route to fetch apartments with favorite status
 app.get('/apartments', verifyToken, async (req, res) => {
