@@ -34,7 +34,7 @@ jobs:
       # Step 4: Run tests
       - name: Run tests
         working-directory: frontend/frontend
-        run: npm test -- --watch=false --no-progress
+        run: npm test -- --watch=false --no-progress --browsers ChromeHeadless
 
       # Step 5: Build the Angular app
       - name: Build Angular app
