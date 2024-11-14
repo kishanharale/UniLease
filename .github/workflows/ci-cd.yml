@@ -44,7 +44,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: coverage  # Adjust the path based on where your test results are stored
+          path: UniLease/frontend/frontend/coverage  # Adjust the path based on where your test results are stored
 
       # Optional: Deployment step
       # Uncomment and configure this section if you have a deployment step
