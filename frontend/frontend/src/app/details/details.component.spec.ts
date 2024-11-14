@@ -107,6 +107,7 @@ describe('HouseDetailsComponent', () => {
   it('should open a new window to view the 3D floor plan', () => {
     spyOn(window, 'open');
     component.view3D();
-    expect(window.open).toHaveBeenCalledWith('assets/images/onebed_1bath.html', '_blank');
+    expect(window.open).toHaveBeenCalledWith('/assets/images/onebed_1bath.html', '_blank');
   });
+  
 });
