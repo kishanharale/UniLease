@@ -1,122 +1,156 @@
-/* Container */
+/* Dashboard Container */
 .dashboard-container {
-    display: flex;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Sidebar */
-  .sidebar {
-    width: 200px;
-    background-color: #f75b81;
-    color: white;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  
-  .sidebar .logo {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .sidebar .nav-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .sidebar .nav-list li {
-    padding: 10px 0;
-    cursor: pointer;
-  }
-  
-  /* Main Content */
-  .main-content {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  /* Header */
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-  }
-  
-  .search-bar {
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 200px;
-  }
-  
-  .profile {
-    text-align: right;
-  }
-  
-  .profile span {
-    font-weight: bold;
-  }
-  
-  .profile .role {
-    font-size: 12px;
-    color: gray;
-  }
-  
-  /* Stats */
-  .stats {
-    display: flex;
-    gap: 20px;
-    margin: 20px 0;
-  }
-  
-  .stat-item {
-    background-color: #f1f5f9;
-    padding: 20px;
-    text-align: center;
-    border-radius: 8px;
-    width: 100px;
-  }
-  
-  .income {
-    background-color: #f75b81;
-    color: white;
-  }
-  
-  /* Tables */
-  .tables {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .table {
-    flex: 1;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .see-all {
-    background-color: #f75b81;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  table th, table td {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-  }
+  display: flex;
+  font-family: Arial, sans-serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.sidebar .logo {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.sidebar .nav-list {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar .nav-list li {
+  padding: 10px 0;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.sidebar .nav-list li a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sidebar .nav-list li:hover {
+  color: #fff;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.header .search-bar {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.header .profile {
+  text-align: right;
+}
+
+.header .profile span {
+  font-weight: bold;
+}
+
+.header .profile .role {
+  font-size: 12px;
+  color: gray;
+}
+
+/* Stats Section */
+.stats {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.stat-item {
+  background-color: #f1f5f9;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  width: 100px;
+}
+
+.income {
+  background-color: #f75b81;
+  color: white;
+}
+
+/* Add House Form */
+.add-house {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-house h3 {
+  color: #333;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Form Styles */
+.house-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.form-group {
+  flex: 1 1 45%; /* Adjust width for a two-column layout */
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  flex: 1 1 100%; /* Full width for the submit button */
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  color: #555;
+  font-weight: bold;
+}
+
+.form-group input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Submit Button */
+.submit-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.submit-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}

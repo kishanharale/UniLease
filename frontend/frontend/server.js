@@ -10,7 +10,7 @@ const port = 3000;
 
 // PostgreSQL connection pool
 const pool = new Pool({
-    user: 'likhith',
+    user: 'postgres',
     host: 'localhost',
     database: 'Unilease',
     password: '1234',
@@ -183,6 +183,26 @@ app.get('/favorites', verifyToken, async (req, res) => {
     } catch (error) {
         console.error('Error fetching favorites:', error.message);
         res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.post('/api/addhouse', async (req, res) => {
+    const { address, university_id, price, image_url } = req.body;
+
+    try {
+        const query = `
+            INSERT INTO apartments (address, university_id, price, image_url)
+            VALUES ($1, $2, $3, $4) RETURNING *;
+        `;
+        const values = [address, university_id, price, image_url];
+
+        const result = await pool.query(query, values);
+
+        console.log('New house data inserted:', result.rows[0]);
+        res.status(201).json({ message: 'House added successfully', house: result.rows[0] });
+    } catch (error) {
+        console.error('Error inserting data:', error);
+        res.status(500).json({ message: 'Failed to add house', error });
     }
 });
 
