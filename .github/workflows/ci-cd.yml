@@ -1,0 +1,55 @@
+name: CI/CD Pipeline
+
+# Run this workflow on pushes or pull requests to the main or ListHouses branches
+on:
+  push:
+    branches:
+      - main
+      - ListHouses
+  pull_request:
+    branches:
+      - main
+      - ListHouses
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Adjust Node version based on your project requirements
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: npm test -- --watch=false --no-progress
+
+      # Step 5: Build the Angular app
+      - name: Build Angular app
+        run: npm run build --if-present
+
+      # Step 6: Upload test results (optional - useful for debugging)
+      - name: Archive test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: coverage  # Adjust the path based on where your test results are stored
+
+      # Optional: Deployment step
+      # Uncomment and configure this section if you have a deployment step
+      # - name: Deploy
+      #   run: |
+      #     # Insert deployment script here
+      #     # For example, you might push to a hosting service like Firebase, AWS, or Netlify
+      #     echo "Deploying application..."
