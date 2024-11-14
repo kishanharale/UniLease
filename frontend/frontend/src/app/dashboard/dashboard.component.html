@@ -1,44 +1,21 @@
 <div class="container">
-  <!-- Top section: Profile Details -->
-  <div class="row justify-content-end">
-    <div class="col-md-3">
-      <div class="card profile-card">
-        <div class="card-header">Profile Details</div>
-        <div class="card-body">
-          <p><strong>Name:</strong> {{ profile?.name }}</p>
-          <p><strong>Email:</strong> {{ profile?.email }}</p>
-          <!-- Add more profile details as needed -->
-        </div>
-      </div>
+  <button class="btn btn-primary" (click)="toggleDropdown()">Profile</button>
+  
+  <div *ngIf="isDropdownOpen" class="dropdown-menu">
+    <div class="dropdown-item">
+      <p><strong>Name:</strong> {{ profile?.name }}</p>
+      <p><strong>Email:</strong> {{ profile?.email }}</p>
     </div>
-  </div>
-
-  <!-- Main section: Dashboard title and other sections -->
-  <h2 class="text-center my-4">User Dashboard</h2>
-
-  <div class="row">
-    <!-- Favorites Section -->
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-header">Favorites</div>
-        <div class="card-body">
-          <ul>
-            <li *ngFor="let favorite of favorites">{{ favorite.address }}</li>
-          </ul>
-        </div>
-      </div>
+    <hr>
+    <div class="dropdown-item">
+      <h6>Favorites</h6>
+      <ul>
+        <li *ngFor="let favorite of favorites">{{ favorite.address }}</li>
+      </ul>
     </div>
-
-    <!-- Recent Activity Section -->
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-header">Recent Activity</div>
-        <div class="card-body">
-          <ul>
-            <li *ngFor="let activity of recentActivity">{{ activity.description }}</li>
-          </ul>
-        </div>
-      </div>
+    <hr>
+    <div class="dropdown-item">
+      <button class="btn btn-danger" (click)="logout()">Logout</button>
     </div>
   </div>
 </div>

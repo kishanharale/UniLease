@@ -1,76 +1,59 @@
-/* Dashboard Container Styling */
-.dashboard-container {
-  position: fixed;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-container {
+  position: absolute;
   top: 20px;
   right: 20px;
-  width: 250px;
   z-index: 1000;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-section {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.apartment-card {
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.apartment-card:hover {
+  transform: translateY(-5px);
+}
+
+.apartment-image {
+  border-radius: 8px 0 0 8px;
+  object-fit: cover;
+}
+
+.favorite-btn {
+  font-size: 1.2em;
+}
+
+.form-control, .form-check-label {
   font-size: 0.9em;
 }
 
-.dashboard-container h4 {
-  font-size: 1.1em;
-  margin-bottom: 15px;
-  text-align: center;
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+h2 {
   font-weight: bold;
 }
 
-.dashboard-section {
-  margin-bottom: 10px;
-}
-
-.dashboard-section p,
-.dashboard-section ul {
-  margin: 0;
-  padding: 0;
-  font-size: 0.9em;
-}
-
-.dashboard-section ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.dashboard-section ul li {
-  margin: 5px 0;
-}
-
-.dashboard-section:last-child {
-  margin-bottom: 0;
-}
-
-/* Card adjustments for consistency */
-.apartment-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .dashboard-container {
-    position: static;
-    width: 100%;
-    margin-bottom: 20px;
-    box-shadow: none;
-  }
-
-  .layout {
-    flex-direction: column;
-  }
-
-  .filter-section {
-    margin-right: 0;
-    margin-bottom: 20px;
-  }
+h5 {
+  font-size: 1.2em;
+  font-weight: 500;
 }
