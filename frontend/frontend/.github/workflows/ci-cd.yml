@@ -3,10 +3,11 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - ListHouses
   pull_request:
     branches:
-      - main
+      - ListHouses
+
 
 jobs:
   build-and-test:
