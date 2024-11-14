@@ -28,17 +28,17 @@ jobs:
 
       # Step 3: Navigate to the Angular app directory and install dependencies
       - name: Install dependencies
-        working-directory: UniLease/frontend/frontend
+        working-directory: frontend/frontend
         run: npm install
 
       # Step 4: Run tests
       - name: Run tests
-        working-directory: UniLease/frontend/frontend
+        working-directory: frontend/frontend
         run: npm test -- --watch=false --no-progress
 
       # Step 5: Build the Angular app
       - name: Build Angular app
-        working-directory: UniLease/frontend/frontend
+        working-directory: frontend/frontend
         run: npm run build --if-present
 
       # Step 6: Upload test results (optional - useful for debugging)
@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: UniLease/frontend/frontend/coverage  # Adjust the path based on where your test results are stored
+          path: frontend/frontend/coverage  # Adjust the path based on where your test results are stored
 
       # Optional: Deployment step
       # Uncomment and configure this section if you have a deployment step
