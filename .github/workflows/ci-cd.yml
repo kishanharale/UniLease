@@ -57,6 +57,10 @@ jobs:
         working-directory: frontend/frontend
         run: npx ng test --watch=false --no-progress --browsers ChromeHeadless --include src/app/details/details.component.spec.ts
 
+      - name: Run tests for list houses component
+        working-directory: frontend/frontend
+        run: npx ng test --watch=false --no-progress --browsers ChromeHeadless --include src/app/list-houses/list-houses.component.spec.ts
+
       # Optional: Deployment step
       # Uncomment and configure this section if you have a deployment step
       # - name: Deploy
