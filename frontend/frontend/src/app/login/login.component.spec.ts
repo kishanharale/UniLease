@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';  // For mocking HTTP requests
-import { RouterTestingModule } from '@angular/router/testing';  // For mocking the router
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { LoginComponent } from './login.component';
-import { FormsModule } from '@angular/forms';  // For two-way data binding support
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -11,26 +12,36 @@ describe('LoginComponent', () => {
   let httpTestingController: HttpTestingController;
   let router: Router;
 
+  // Define a mock AngularFireAuth class
+  const mockAngularFireAuth = {
+    signInWithEmailAndPassword: jasmine.createSpy('signInWithEmailAndPassword'),
+    createUserWithEmailAndPassword: jasmine.createSpy('createUserWithEmailAndPassword')
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,  // To mock HTTP requests
-        RouterTestingModule,      // To mock the router
-        FormsModule               // To allow ngModel for form handling
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FormsModule
       ],
       declarations: [LoginComponent],
+      providers: [
+        { provide: AngularFireAuth, useValue: mockAngularFireAuth }, // Provide mock AngularFireAuth
+        { provide: 'angularfire2.app.options', useValue: {} } // Provide empty Firebase config
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     httpTestingController = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
-    spyOn(router, 'navigate');  // Spy on router's navigate method to check redirections
-    fixture.detectChanges();    // Trigger initial data binding
+    spyOn(router, 'navigate');
+    fixture.detectChanges();
   });
 
   afterEach(() => {
-    httpTestingController.verify();  // Ensure no pending HTTP requests after each test
+    httpTestingController.verify();
   });
 
   it('should create the login component', () => {
