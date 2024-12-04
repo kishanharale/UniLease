@@ -76,8 +76,16 @@ export class LoginComponent {
 
     if (!this.username || !this.email || !this.password) {
       alert('All fields are required for sign-up.');
+
       return;
     }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[eE][dD][uU]$/;
+    if (!emailRegex.test(this.email)) {
+      alert('Please provide a valid student email address.');
+      return;
+    }
+    
 
     // POST request for sign-up
     this.http.post('http://localhost:3000/signup', { username: this.username, email: this.email, password: this.password })
