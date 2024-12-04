@@ -100,7 +100,7 @@ describe('LoginComponent', () => {
   it('should send a POST request to the sign-up API and show success message', () => {
     spyOn(window, 'alert');
     component.username = 'testuser';
-    component.email = 'testuser@example.com';
+    component.email = 'testuser@example.edu';
     component.password = 'testpassword';
 
     // Trigger signUp
@@ -109,7 +109,7 @@ describe('LoginComponent', () => {
     // Expect a POST request to the sign-up API with the correct payload
     const req = httpTestingController.expectOne('http://localhost:3000/signup');
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({ username: 'testuser', email: 'testuser@example.com', password: 'testpassword' });
+    expect(req.request.body).toEqual({ username: 'testuser', email: 'testuser@example.edu', password: 'testpassword' });
 
     // Simulate a successful response
     req.flush({ message: 'Sign-up successful' });
@@ -120,7 +120,7 @@ describe('LoginComponent', () => {
 
   it('should handle sign-up errors and display error message', () => {
     component.username = 'testuser';
-    component.email = 'testuser@example.com';
+    component.email = 'testuser@example.edu';
     component.password = 'testpassword';
 
     // Trigger signUp
