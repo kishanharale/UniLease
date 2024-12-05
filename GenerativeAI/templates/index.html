@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Search Interface</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <button id="tryAiBtn">Try AI</button>
+
+    <!-- Modal Pop-up -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Select Search Type</h2>
+            <button id="imageSearchBtn">Image Search</button>
+            <button id="textSearchBtn">Text Search</button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for handling modal display
+        const modal = document.getElementById("myModal");
+        const btn = document.getElementById("tryAiBtn");
+        const span = document.getElementsByClassName("close")[0];
+        const imageSearchBtn = document.getElementById("imageSearchBtn");
+        const textSearchBtn = document.getElementById("textSearchBtn");
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Redirect to the respective FastAPI endpoints
+        imageSearchBtn.onclick = function() {
+            window.location.href = "/image-search";
+        }
+
+        textSearchBtn.onclick = function() {
+            window.location.href = "/text-search";
+        }
+    </script>
+</body>
+</html>
