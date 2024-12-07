@@ -1,5 +1,4 @@
 name: Docker Image CI
-
 on:
   push:
     branches:
@@ -18,7 +17,7 @@ jobs:
     - name: Checkout code on this fresh ubuntu OS
       uses: actions/checkout@v4
 
-    - name: Set up Node.js 18
+    - name: Set up Node.js 18 for build environment
       uses: actions/setup-node@v3
       with:
         node-version: '18'
@@ -33,8 +32,13 @@ jobs:
       id: tag
       run: echo "tag=$(date +%s)" >> $GITHUB_ENV
 
-    - name: Build the Docker image
-      run: docker build ./frontend/frontend --file ./frontend/frontend/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/unilease:${{ env.tag }}
+    - name: Build the Docker image with Node.js 18
+      run: |
+        docker build \
+          --build-arg NODE_VERSION=18 \
+          ./frontend/frontend \
+          --file ./frontend/frontend/Dockerfile \
+          --tag ${{ secrets.DOCKER_USERNAME }}/unilease:${{ env.tag }}
 
     - name: Push the Docker image to our DockerHub repo
       run: docker push ${{ secrets.DOCKER_USERNAME }}/unilease:${{ env.tag }}
