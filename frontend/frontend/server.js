@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer'); // Import nodemailer
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const app = express();
 const port = 3000;
@@ -81,10 +82,9 @@ app.post('/signin', async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
-        
-        // Send an email notification on successful sign-in
+
         const mailOptions = {
-            from: 'jethinreddy17@gmail.com', // Replace with your email
+            from: 'jethinreddy17@gmail.com',
             to: user.email,
             subject: 'Sign-In Notification',
             text: `Hello ${user.username},\n\nYou have successfully signed in to UniLease. If this wasn't you, please contact support immediately.`
@@ -128,7 +128,75 @@ app.get('/user/profile', verifyToken, async (req, res) => {
     }
 });
 
-// Protected route to fetch apartments with favorite status
+// Forgot Password Endpoint
+app.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const userResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const user = userResult.rows[0];
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const tokenExpiry = new Date(Date.now() + 3600000); // 1-hour expiry
+
+        await pool.query(
+            'UPDATE users SET reset_token = $1, token_expiry = $2 WHERE email = $3',
+            [resetToken, tokenExpiry, email]
+        );
+
+        const resetLink = `http://localhost:4200/reset-password/${resetToken}`;
+        const mailOptions = {
+            from: 'jethinreddy17@gmail.com',
+            to: email,
+            subject: 'Password Reset Request',
+            html: `<p>Hello ${user.username},</p>
+                   <p>You requested to reset your password. Click the link below to reset it:</p>
+                   <a href="${resetLink}">Reset Password</a>
+                   <p>If you did not request this, please ignore this email.</p>`
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Password reset link sent to your email.' });
+    } catch (error) {
+        console.error('Error in Forgot Password:', error.message);
+        res.status(500).json({ error: 'Failed to process Forgot Password request' });
+    }
+});
+
+// Reset Password Endpoint
+app.post('/reset-password/:token', async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    try {
+        const userResult = await pool.query(
+            'SELECT * FROM users WHERE reset_token = $1 AND token_expiry > NOW()',
+            [token]
+        );
+
+        if (userResult.rows.length === 0) {
+            return res.status(400).json({ error: 'Invalid or expired token' });
+        }
+
+        const user = userResult.rows[0];
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await pool.query(
+            'UPDATE users SET password = $1, reset_token = NULL, token_expiry = NULL WHERE id = $2',
+            [hashedPassword, user.id]
+        );
+
+        res.status(200).json({ message: 'Password reset successful. You can now log in with your new password.' });
+    } catch (error) {
+        console.error('Error resetting password:', error.message);
+        res.status(500).json({ error: 'Failed to reset password' });
+    }
+});
+
+// Protected Apartments Endpoint
 app.get('/apartments', verifyToken, async (req, res) => {
     try {
         const userId = req.user.userId;
@@ -146,7 +214,7 @@ app.get('/apartments', verifyToken, async (req, res) => {
     }
 });
 
-// Toggle favorite status
+// Toggle Favorite Status
 app.post('/favorites', verifyToken, async (req, res) => {
     const { houseId, isFavorite } = req.body;
     const userId = req.user.userId;
@@ -190,7 +258,7 @@ app.get('/user/activity', verifyToken, async (req, res) => {
     }
 });
 
-// Favorites list for authenticated user
+// Favorites List for Authenticated User
 app.get('/favorites', verifyToken, async (req, res) => {
     const userId = req.user.userId;
 
@@ -209,7 +277,7 @@ app.get('/favorites', verifyToken, async (req, res) => {
     }
 });
 
-// Add new house to apartments
+// Add New House to Apartments
 app.post('/api/addhouse', async (req, res) => {
     const { address, university_id, price, image_url } = req.body;
 

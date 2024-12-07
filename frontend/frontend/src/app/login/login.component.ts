@@ -15,7 +15,11 @@ export class LoginComponent {
   username: string = '';
   email: string = '';
   password: string = '';
+  forgotEmail: string = '';
   errorMessage: string = '';
+  forgotPasswordMessage: string = '';
+  forgotPasswordMode: boolean = false; // Toggle Forgot Password mode
+  signUpMode: boolean = false; // Toggle Sign-Up mode
 
   constructor(
     private http: HttpClient,
@@ -23,19 +27,26 @@ export class LoginComponent {
     public auth: AngularFireAuth
   ) {}
 
-  // Toggle to sign-up mode
+  // Toggle Forgot Password mode
+  toggleForgotPassword(event: Event): void {
+    event.preventDefault(); // Prevent default anchor behavior
+    this.forgotPasswordMode = true;
+    this.signUpMode = false; // Ensure Sign-Up mode is disabled
+  }
+
+  // Switch to Sign-Up mode
   switchToSignUp(): void {
-    const container = document.querySelector('.container');
-    container?.classList.add('sign-up-mode');
+    this.signUpMode = true;
+    this.forgotPasswordMode = false; // Ensure Forgot Password mode is disabled
   }
 
-  // Toggle to sign-in mode
+  // Switch to Sign-In mode
   switchToSignIn(): void {
-    const container = document.querySelector('.container');
-    container?.classList.remove('sign-up-mode');
+    this.signUpMode = false;
+    this.forgotPasswordMode = false; // Reset both modes
   }
 
-  // Handle sign-in
+  // Handle Sign-In
   signIn(event: Event): void {
     event.preventDefault();
 
@@ -44,12 +55,6 @@ export class LoginComponent {
       return;
     }
 
-    if (this.username === 'kishan' && this.password === '1234') {
-      this.router.navigate(['/app-admin-panel']);
-      return;
-    }
-
-    // POST request for sign-in
     this.http.post('http://localhost:3000/signin', { username: this.username, password: this.password })
       .pipe(
         catchError(error => {
@@ -70,13 +75,12 @@ export class LoginComponent {
       });
   }
 
-  // Handle sign-up
+  // Handle Sign-Up
   signUp(event: Event): void {
     event.preventDefault();
 
     if (!this.username || !this.email || !this.password) {
       alert('All fields are required for sign-up.');
-
       return;
     }
 
@@ -85,9 +89,7 @@ export class LoginComponent {
       alert('Please provide a valid student email address.');
       return;
     }
-    
 
-    // POST request for sign-up
     this.http.post('http://localhost:3000/signup', { username: this.username, email: this.email, password: this.password })
       .pipe(
         catchError(error => {
@@ -96,8 +98,9 @@ export class LoginComponent {
         })
       )
       .subscribe({
-        next: (response: any) => {
+        next: () => {
           alert('Sign-up successful!');
+          this.switchToSignIn();
         },
         error: (error) => {
           this.errorMessage = 'Sign-up failed. Please check your input.';
@@ -106,12 +109,34 @@ export class LoginComponent {
       });
   }
 
+  // Handle Forgot Password
+  onForgotPassword(): void {
+    if (!this.forgotEmail) {
+      alert('Email is required for password reset.');
+      return;
+    }
+
+    this.http.post('http://localhost:3000/forgot-password', { email: this.forgotEmail })
+      .pipe(
+        catchError(error => {
+          this.forgotPasswordMessage = 'Error sending reset link. Please try again.';
+          return throwError(() => new Error('An error occurred: ' + error.message));
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.forgotPasswordMessage = 'Password reset link sent to your email.';
+        },
+        error: (error) => {
+          console.error('Forgot Password error:', error);
+        }
+      });
+  }
+
   // Google Login with Firebase
   loginWithGoogle(): void {
-    console.log('Google login button clicked'); // Add this line for debugging
     this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then((result) => {
-        console.log('Google login successful:', result);
+      .then(() => {
         this.router.navigate(['/houses']);
       })
       .catch((error) => {
@@ -119,16 +144,14 @@ export class LoginComponent {
         console.error('Google login error:', error);
       });
   }
-  
 
   // Facebook Login with Firebase
   loginWithFacebook(): void {
     this.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
-      .then((result: any) => {
-        console.log('Facebook login successful:', result);
+      .then(() => {
         this.router.navigate(['/houses']);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         this.errorMessage = 'Facebook login failed. Please try again.';
         console.error('Facebook login error:', error);
       });
@@ -137,17 +160,16 @@ export class LoginComponent {
   // Twitter Login with Firebase
   loginWithTwitter(): void {
     this.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider())
-      .then((result: any) => {
-        console.log('Twitter login successful:', result);
+      .then(() => {
         this.router.navigate(['/houses']);
       })
-      .catch((error: any) => {
+      .catch((error) => {
         this.errorMessage = 'Twitter login failed. Please try again.';
         console.error('Twitter login error:', error);
       });
   }
 
-  // LinkedIn Login placeholder (Firebase does not natively support LinkedIn)
+  // LinkedIn Login placeholder
   loginWithLinkedIn(): void {
     this.errorMessage = 'LinkedIn login is not implemented. Please try another method.';
     console.warn('LinkedIn login is not directly supported by Firebase.');
