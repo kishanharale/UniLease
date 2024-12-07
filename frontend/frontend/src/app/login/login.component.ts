@@ -55,6 +55,14 @@ export class LoginComponent {
       return;
     }
 
+    // Check for admin credentials
+    if (this.username === 'kishan' && this.password === '1234') {
+      // Navigate to admin page if credentials match
+      this.router.navigate(['/app-admin-panel']);
+      return;
+    }
+
+    // Handle regular user sign-in
     this.http.post('http://localhost:3000/signin', { username: this.username, password: this.password })
       .pipe(
         catchError(error => {
