@@ -32,7 +32,7 @@ jobs:
       id: tag
       run: echo "tag=$(date +%s)" >> $GITHUB_ENV
 
-    - name: Build the Docker image with Node.js 18
+    - name: Build the Docker image 
       run: |
         docker build \
           --build-arg NODE_VERSION=18 \
