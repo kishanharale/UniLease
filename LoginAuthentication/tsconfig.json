@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",               // Output directory for compiled files
+    "strict": true,                            // Enable strict type checking options
+    "noImplicitOverride": true,                // Prevent overriding methods without proper type annotation
+    "noPropertyAccessFromIndexSignature": true, // Prevent accessing properties through index signature without proper type
+    "noImplicitReturns": true,                 // Ensure functions always have a return type
+    "noFallthroughCasesInSwitch": true,        // Prevent fallthrough in switch statements
+    "skipLibCheck": true,                     // Skip library checks for faster builds
+    "isolatedModules": true,                   // Ensures each file can be transpiled independently
+    "esModuleInterop": true,                   // Enable interoperability with CommonJS modules
+    "sourceMap": true,                         // Generate source maps for debugging
+    "declaration": false,                      // Skip generating declaration files
+    "experimentalDecorators": true,            // Enable support for decorators
+    "moduleResolution": "bundler",             // Use bundler resolution strategy (optimal for modern bundlers)
+    "importHelpers": true,                     // Optimize code by reusing helper functions from tslib
+    "target": "ES2022",                        // Target ES2022 for the output code
+    "module": "ES2022",                        // Use ES2022 module system
+    "lib": [
+      "ES2022",                                // Include ES2022 library for modern JS features
+      "dom"                                    // Include DOM typings for browser APIs
+    ]
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,  // Disable legacy message id format in i18n
+    "strictInjectionParameters": true,         // Ensure strict type checking of DI parameters
+    "strictInputAccessModifiers": true,        // Ensure strict access modifiers for inputs
+    "strictTemplates": true                    // Enforce strict template type checking
+  }
+}
